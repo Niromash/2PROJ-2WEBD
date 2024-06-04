@@ -1,55 +1,44 @@
-import {useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faArrowRight, faHome, faQuestion} from "@fortawesome/free-solid-svg-icons";
+import React, {useState} from 'react';
 
-export default function Sidebar() {
-    const navbarItems = [
-        {
-            name: "Home",
-            path: "/",
-            icon: faHome
-        },
-        {
-            name: "About",
-            path: "/about",
-            icon: faQuestion
-        }
-    ]
+const Sidebar: React.FC = () => {
+    const [isCollapsed, setIsCollapsed] = useState(false);
 
-    const [reduced, setReduced] = useState(false);
+    const toggleSidebar = () => {
+        setIsCollapsed(!isCollapsed);
+    };
 
     return (
-        <>
-            <div className="relative">
-                {reduced ? (
-                    <div className="flex flex-col gap-y-4 h-screen px-4 pt-8 bg-gray-200">
-                        <h1 className="text-3xl font-bold text-center">Museum</h1>
-                        <ul className="flex flex-col gap-y-2 items-center">
-                            {navbarItems.map(item => (
-                                <li key={item.path} className="flex items-center justify-between w-full px-6">
-                                    <FontAwesomeIcon icon={item.icon}/>
-                                    {item.name}
-                                </li>
-                            ))}
-                        </ul>
+        <div className="flex h-full">
+            <div
+                className={`top-0 left-0 ${isCollapsed ? 'w-28' : 'w-64'} h-full bg-gray-800 shadow-md transition-all duration-300`}>
+                <nav className="flex flex-col p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                        <span className="text-white whitespace-nowrap overflow-hidden transition-all duration-300">
+                            <img src="path_to_profile_image.jpg" alt="Profile"
+                                 className="w-10 h-10 rounded-full"/>
+                        </span>
+                        <button onClick={toggleSidebar} className="text-white focus:outline-none">
+                            {isCollapsed ? '→' : '←'}
+                        </button>
                     </div>
-                ) : (
-                    <div className="flex flex-col gap-y-4 h-screen px-4 pt-8 items-center bg-gray-200">
-                        <ul className="flex flex-col gap-y-2 items-center">
-                            {navbarItems.map(item => (
-                                <li key={item.path} className="flex items-center justify-between w-full">
-                                    <FontAwesomeIcon icon={item.icon}/>
-                                </li>
-                            ))}
-                        </ul>
+                    <div className="flex items-center space-x-4">
+                        <div className={`${isCollapsed ? 'hidden' : 'block'}`}>
+                            <p className="text-white">Museum</p>
+                            <p className="text-gray-400 text-sm">Art Museum</p>
+                        </div>
                     </div>
-                )}
-                <button onClick={() => setReduced(!reduced)}
-                        className="absolute bottom-0 right-0 p-2 bg-gray-300 rounded-full">
-                    <FontAwesomeIcon icon={reduced ? faArrowLeft : faArrowRight}/>
-                </button>
+                    <a href="/dashboard" className="text-white flex items-center">
+                        <i className="fas fa-tachometer-alt"></i>
+                        <span className={`${isCollapsed ? 'hidden' : 'block'} ml-4`}>Home</span>
+                    </a>
+                    <a href="/profile" className="text-white flex items-center">
+                        <i className="fas fa-user"></i>
+                        <span className={`${isCollapsed ? 'hidden' : 'block'} ml-4`}>Search</span>
+                    </a>
+                </nav>
             </div>
+        </div>
+    );
+};
 
-        </>
-    )
-}
+export default Sidebar;
