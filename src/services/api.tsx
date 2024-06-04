@@ -5,7 +5,10 @@ export type ArtObject = {
     title: string;
     primaryImage: string;
     artistDisplayName: string;
+    artistDisplayBio: string;
+    dimensions: string;
 };
+
 
 export async function getHighlights(query?: string): Promise<ArtObject[]> {
     const highlightsResponse = await fetch(`${baseURL}/search?isHighlight=true&hasImages=true&q=${query ?? 'dog'}`);
@@ -50,6 +53,8 @@ export async function getObjectDetails(objectId: number): Promise<ArtObject> {
             title: objectData.title,
             primaryImage: objectData.primaryImage,
             artistDisplayName: objectData.artistDisplayName,
+            artistDisplayBio: objectData.artistDisplayBio,
+            dimensions: objectData.dimensions
         } as ArtObject;
     } catch (error) {
         console.error('Error fetching object details:', error);

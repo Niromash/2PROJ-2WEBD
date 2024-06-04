@@ -54,9 +54,9 @@ const HomePage: React.FC = () => {
                     // Display skeletons while loading
                     Array.from({length: 6}).map((_, index) => (
                         <div key={index} className="p-4">
-                            <Skeleton height={200}/>
-                            <Skeleton height={20} width="80%" style={{margin: '10px 0'}}/>
-                            <Skeleton height={20} width="60%"/>
+                            <Skeleton height={300} width={300} />
+                            <Skeleton height={20} width="80%" />
+                            <Skeleton height={20} width="60%" />
                         </div>
                     ))
                 ) : (
@@ -65,7 +65,7 @@ const HomePage: React.FC = () => {
                             <Card
                                 image={item.primaryImage}
                                 title={item.title}
-                                author={item.artistDisplayName}
+                                artist={item.artistDisplayName}
                             />
                         </Link>
                     ))

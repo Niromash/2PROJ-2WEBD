@@ -5,3 +5,11 @@
 #root {
   @apply w-full mx-auto flex;
 }
+
+.fixed {
+  position: fixed;
+}
+
+.z-50 {
+  z-index: 50;
+}

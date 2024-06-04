@@ -25,8 +25,8 @@ const ObjectPage: React.FC = () => {
     }, [id]);
 
     return (
-        <div className="p-4">
-            {object ? <ObjectDetail name={object.artistDisplayName} title={object.title} image={object.primaryImage}/> : <p>Loading...</p>}
+        <div className="w-full">
+            {object ? <ObjectDetail name={object.artistDisplayName} title={object.title} image={object.primaryImage} artistDisplayBio={object.artistDisplayBio} dimensions={object.dimensions} /> : 'Loading...'}
         </div>
     );
 };
