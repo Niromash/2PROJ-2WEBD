@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faSearch} from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+import {useNavigate} from "react-router-dom";
 
 const SearchBar: React.FC = () => {
-    const [query, setQuery] = useState('');
+    const navigate = useNavigate();
 
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Implement search functionality
-    };
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const searchQuery = formData.get('search') as string;
+        navigate(`/?q=${encodeURIComponent(searchQuery)}`);
+    }
 
     return (
-        <form onSubmit={handleSearch} className="flex">
-            <input
-                type="text"
-                className="p-2 rounded-l"
-                placeholder="Search..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-            />
-            <button type="submit" className="bg-blue-700 text-white p-2 rounded-r">
-                Search
+        <form className={"flex items-center gap-x-4"} onSubmit={handleSubmit}>
+            <input type="text" placeholder="Search" name="search"
+                   className="px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none"/>
+            <button>
+                <FontAwesomeIcon icon={faSearch} className="text-white"/>
             </button>
         </form>
     );

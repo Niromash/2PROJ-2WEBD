@@ -9,7 +9,6 @@ function App() {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route path="/" element={<Home/>}/>
-                <Route path="search" element={"Search"}/>
                 <Route path="objects/:id" element={<ObjectPage />} />
             </Route>
             <Route path="*" element={"Cette page n'existe pas"}/>

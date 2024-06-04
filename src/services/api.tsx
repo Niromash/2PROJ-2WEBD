@@ -7,36 +7,34 @@ export type ArtObject = {
     artistDisplayName: string;
 };
 
-export async function getHighlights(): Promise<ArtObject[]> {
-    try {
-        const highlightsResponse = await fetch(`${baseURL}/search?isHighlight=true&hasImages=true&q=dog`);
-        if (!highlightsResponse.ok) {
-            throw new Error(`Failed to fetch highlights: ${highlightsResponse.status}`);
-        }
+export async function getHighlights(query?: string): Promise<ArtObject[]> {
+    const highlightsResponse = await fetch(`${baseURL}/search?isHighlight=true&hasImages=true&q=${query ?? 'dog'}`);
+    if (!highlightsResponse.ok) {
+        throw new Error(`Failed to fetch highlights: ${highlightsResponse.status}`);
+    }
 
-        const highlightsData = await highlightsResponse.json();
-        const highlightObjectIds = highlightsData.objectIDs.slice(0, 10);
-
-        const highlightDetailsPromises = highlightObjectIds.map(async (objectId: number) => {
-            const objectResponse = await fetch(`${baseURL}/objects/${objectId}`);
-            if (!objectResponse.ok) {
-                throw new Error(`Failed to fetch object ${objectId}: ${objectResponse.status}`);
-            }
-            const objectData = await objectResponse.json();
-            return {
-                objectID: objectData.objectID,
-                title: objectData.title,
-                primaryImage: objectData.primaryImage,
-                artistDisplayName: objectData.artistDisplayName,
-            } as ArtObject;
-        });
-
-        const highlightDetails = await Promise.all(highlightDetailsPromises);
-        return highlightDetails.filter((highlight) => highlight.primaryImage && highlight.artistDisplayName && highlight.title);
-    } catch (error) {
-        console.error('Error fetching highlights:', error);
+    const highlightsData = await highlightsResponse.json();
+    if (!highlightsData.objectIDs) {
         return [];
     }
+    const highlightObjectIds = highlightsData.objectIDs.slice(0, 10);
+
+    const highlightDetailsPromises = highlightObjectIds.map(async (objectId: number) => {
+        const objectResponse = await fetch(`${baseURL}/objects/${objectId}`);
+        if (!objectResponse.ok) {
+            throw new Error(`Failed to fetch object ${objectId}: ${objectResponse.status}`);
+        }
+        const objectData = await objectResponse.json();
+        return {
+            objectID: objectData.objectID,
+            title: objectData.title,
+            primaryImage: objectData.primaryImage,
+            artistDisplayName: objectData.artistDisplayName,
+        } as ArtObject;
+    });
+
+    const highlightDetails = await Promise.all(highlightDetailsPromises);
+    return highlightDetails.filter((highlight) => highlight.primaryImage && highlight.artistDisplayName && highlight.title);
 }
 
 export async function getObjectDetails(objectId: number): Promise<ArtObject> {
