@@ -9,20 +9,15 @@ export type ArtObject = {
 
 export async function getHighlights(): Promise<ArtObject[]> {
     try {
-        // Step 1: Fetch the highlight object IDs from the API
         const highlightsResponse = await fetch(`${baseURL}/search?isHighlight=true&hasImages=true&q=dog`);
         if (!highlightsResponse.ok) {
             throw new Error(`Failed to fetch highlights: ${highlightsResponse.status}`);
         }
 
         const highlightsData = await highlightsResponse.json();
-        const highlightObjectIds = highlightsData.objectIDs;
+        const highlightObjectIds = highlightsData.objectIDs.slice(0, 10);
 
-        // Limiting the number of highlights for demonstration purposes (e.g., first 10 highlights)
-        const limitedHighlightObjectIds = highlightObjectIds.slice(0, 10);
-
-        // Step 2: Fetch details for each highlighted object
-        const highlightDetailsPromises = limitedHighlightObjectIds.map(async (objectId) => {
+        const highlightDetailsPromises = highlightObjectIds.map(async (objectId: number) => {
             const objectResponse = await fetch(`${baseURL}/objects/${objectId}`);
             if (!objectResponse.ok) {
                 throw new Error(`Failed to fetch object ${objectId}: ${objectResponse.status}`);
@@ -37,8 +32,7 @@ export async function getHighlights(): Promise<ArtObject[]> {
         });
 
         const highlightDetails = await Promise.all(highlightDetailsPromises);
-
-        return highlightDetails.filter((highlight) => highlight.primaryImage).filter((highlight) => highlight.artistDisplayName).filter((highlight) => highlight.title);
+        return highlightDetails.filter((highlight) => highlight.primaryImage && highlight.artistDisplayName && highlight.title);
     } catch (error) {
         console.error('Error fetching highlights:', error);
         return [];
@@ -61,6 +55,6 @@ export async function getObjectDetails(objectId: number): Promise<ArtObject> {
         } as ArtObject;
     } catch (error) {
         console.error('Error fetching object details:', error);
-        return {} as ArtObject;
+        throw error;
     }
 }
