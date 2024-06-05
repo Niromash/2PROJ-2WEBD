@@ -1,11 +1,25 @@
 import React, {useState} from 'react';
 import SearchBar from "./SearchBar";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome} from "@fortawesome/free-solid-svg-icons";
+import {faHome, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 const Sidebar: React.FC = () => {
     const [isCollapsed, setIsCollapsed] = useState(false);
+
+    const navbarItems: { path: string, name: string, icon: IconProp }[] = [
+        {
+            path: '/',
+            name: 'Home',
+            icon: faHome
+        },
+        {
+            path: '/advanced-search',
+            name: 'Advanced Search',
+            icon: faMagnifyingGlass
+        }
+    ]
 
     const toggleSidebar = () => {
         setIsCollapsed(!isCollapsed);
@@ -27,10 +41,15 @@ const Sidebar: React.FC = () => {
                             <p className="text-gray-400 text-sm">Art Museum</p>
                         </div>
                     </div>
-                    <Link to={"/"} className="text-white flex items-center">
-                        <FontAwesomeIcon icon={faHome} className="text-white"/>
-                        <span className={`${isCollapsed ? 'hidden' : 'block'} ml-4`}>Home</span>
-                    </Link>
+
+                    {navbarItems.map(item => (
+                        <Link to={item.path} className="flex items-center justify-between w-full">
+                            <div className="text-white flex items-center">
+                                <FontAwesomeIcon icon={item.icon}/>
+                                <span className={`${isCollapsed ? 'hidden' : 'block'} ml-4`}>{item.name}</span>
+                            </div>
+                        </Link>
+                    ))}
 
                     {isCollapsed ? null : <SearchBar/>}
                 </nav>

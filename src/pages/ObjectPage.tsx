@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getObjectDetails, ArtObject } from '../services/api';
+import { getObjectDetails, ArtObject } from '../services/api.ts';
 import ObjectDetail from '../components/ObjectDetail';
 
 interface RouteParams {
