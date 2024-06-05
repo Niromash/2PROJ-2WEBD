@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import SearchBar from "./SearchBar";
+import QuickSearchBar from "./QuickSearchBar.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
                         </Link>
                     ))}
 
-                    {isCollapsed ? null : <SearchBar/>}
+                    {isCollapsed ? null : <QuickSearchBar/>}
                 </nav>
             </div>
         </div>

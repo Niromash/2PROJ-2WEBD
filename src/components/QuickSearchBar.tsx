@@ -3,7 +3,7 @@ import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 
-const SearchBar: React.FC = () => {
+const QuickSearchBar: React.FC = () => {
     const navigate = useNavigate();
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -15,7 +15,7 @@ const SearchBar: React.FC = () => {
 
     return (
         <form className={"flex items-center gap-x-4"} onSubmit={handleSubmit}>
-            <input type="text" placeholder="Search" name="search"
+            <input type="text" placeholder="Quick Search" name="search"
                    className="px-2 py-1 bg-gray-700 text-white rounded-md focus:outline-none"/>
             <button>
                 <FontAwesomeIcon icon={faSearch} className="text-white"/>
@@ -24,4 +24,4 @@ const SearchBar: React.FC = () => {
     );
 };
 
-export default SearchBar;
+export default QuickSearchBar;
