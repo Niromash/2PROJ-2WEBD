@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getObjectDetails, ArtObject } from '../services/api.ts';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {ArtObject, getObjectDetails} from '../services/api.ts';
 import ObjectDetail from '../components/ObjectDetail';
+import Skeleton from "react-loading-skeleton";
 
 interface RouteParams {
     id: string;
 }
 
 const ObjectPage: React.FC = () => {
-    const { id } = useParams<Record<string, string>>() as unknown as RouteParams;
+    const {id} = useParams<Record<string, string>>() as unknown as RouteParams;
     const [object, setObject] = useState<ArtObject | null>(null);
 
     useEffect(() => {
@@ -26,9 +27,14 @@ const ObjectPage: React.FC = () => {
 
     return (
         <div className="w-full">
-            {object ? <ObjectDetail name={object.artistDisplayName} title={object.title} image={object.primaryImage} artistDisplayBio={object.artistDisplayBio} dimensions={object.dimensions} /> : 'Loading...'}
-        </div>
-    );
+            {object ? <ObjectDetail name={object.artistDisplayName} title={object.title} image={object.primaryImage}
+                                    artistDisplayBio={object.artistDisplayBio} dimensions={object.dimensions}
+                                    additionalImages={object.additionalImages}/> : <div className="flex flex-col justify-center text-center mt-10"><Skeleton height={300} width={350}/><Skeleton height={30} width={400} className="mt-5"/></div>
+
+}
+</div>
+)
+    ;
 };
 
 export default ObjectPage;

@@ -7,7 +7,8 @@ export default function Layout() {
         <>
             <div className="flex w-full">
                 <Sidebar/>
-                <div className="flex flex-col items-center w-full mt-8">
+                <div className="flex flex-col items-center w-full mt-8 ml-10 md:ml-56">
+                    <h1 className="text-4xl font-bold text-gray-800 mb-10">Museum of Art</h1>
                     <QuickSearchBar/>
                     <Outlet/>
                 </div>

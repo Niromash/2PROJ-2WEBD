@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHome, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {Link} from "react-router-dom";
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 const Sidebar: React.FC = () => {
-    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(true); // Set initial state to true
 
     const navbarItems: { path: string, name: string, icon: IconProp }[] = [
         {
@@ -25,12 +25,12 @@ const Sidebar: React.FC = () => {
     };
 
     return (
-        <div className="flex h-screen">
+        <div className="flex fixed h-screen">
             <div
-                className={`top-0 left-0 ${isCollapsed ? 'w-28' : 'w-64'} h-full bg-gray-800 shadow-md transition-all duration-300`}>
-                <nav className="flex flex-col p-4 space-y-4">
+                className={`flex-shrink-0 ${isCollapsed ? 'w-12' : 'w-48'} bg-gray-800 shadow-md transition-all duration-300`}>
+                <nav className="flex flex-col p-4 space-y-4 h-full">
                     <div className="flex items-center justify-between">
-                        <button onClick={toggleSidebar} className="text-white focus:outline-none">
+                        <button onClick={toggleSidebar} className="text-white focus:outline-none hidden md:block">
                             {isCollapsed ? '→' : '←'}
                         </button>
                     </div>
@@ -43,13 +43,16 @@ const Sidebar: React.FC = () => {
 
                     {navbarItems.map(item => (
                         <Link to={item.path} className="flex items-center justify-between w-full" key={item.path}>
-                            <div className="text-white flex items-center">
-                                <FontAwesomeIcon icon={item.icon}/>
+                            <div className="text-white flex items-center mt-3 mb-3 md:mb-0 md:mt-0">
+                                <FontAwesomeIcon icon={item.icon} />
                                 <span className={`${isCollapsed ? 'hidden' : 'block'} ml-4`}>{item.name}</span>
                             </div>
                         </Link>
                     ))}
                 </nav>
+            </div>
+            <div className="flex-1 overflow-auto">
+                {/* Your main content goes here */}
             </div>
         </div>
     );

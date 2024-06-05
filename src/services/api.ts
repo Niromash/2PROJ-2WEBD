@@ -7,6 +7,7 @@ export type ArtObject = {
     artistDisplayName: string;
     artistDisplayBio: string;
     dimensions: string;
+    additionalImages: string[];
 };
 
 export type SearchRequest = {
@@ -62,7 +63,8 @@ export async function getObjectDetails(objectId: number): Promise<ArtObject> {
             primaryImage: objectData.primaryImage,
             artistDisplayName: objectData.artistDisplayName,
             artistDisplayBio: objectData.artistDisplayBio,
-            dimensions: objectData.dimensions
+            dimensions: objectData.dimensions,
+            additionalImages: objectData.additionalImages,
         } as ArtObject;
     } catch (error) {
         console.error('Error fetching object details:', error);

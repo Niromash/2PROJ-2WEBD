@@ -1,10 +1,16 @@
-import React, {useState} from 'react';
-import {advancedSearch, ArtObject, SearchRequest} from '../services/api';
+import React, { useState } from 'react';
+import { advancedSearch, ArtObject, SearchRequest } from '../services/api';
 import Card from "../components/Card.tsx";
+import { Link } from "react-router-dom";
+import Skeleton from 'react-loading-skeleton';
+import '../assets/searchForm.css';
 
 const AdvancedSearchPage: React.FC = () => {
     const [searchRequest, setSearchRequest] = useState<SearchRequest>({} as SearchRequest);
     const [searchResults, setSearchResults] = useState<ArtObject[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [moveRight, setMoveRight] = useState(true);
+    const [shakeButton, setShakeButton] = useState(false);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchRequest({
@@ -15,8 +21,23 @@ const AdvancedSearchPage: React.FC = () => {
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
+        const { query } = searchRequest;
+        if (!query) {
+            setShakeButton(true);
+            setTimeout(() => setShakeButton(false), 500);
+            return;
+        }
+        setLoading(true);
         const results = await advancedSearch(searchRequest);
         setSearchResults(results);
+        setLoading(false);
+    };
+
+    const handleMouseEnter = () => {
+        const { query } = searchRequest;
+        if (!query) {
+            setMoveRight(!moveRight);
+        }
     };
 
     return (
@@ -65,22 +86,42 @@ const AdvancedSearchPage: React.FC = () => {
                     onChange={handleInputChange}
                     className="px-4 py-2 border rounded-md"
                 />
-                <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">Search</button>
+                <button
+                    type="submit"
+                    onMouseEnter={handleMouseEnter}
+                    className={`px-4 py-2 bg-blue-500 text-white rounded-md ${moveRight ? 'move-right' : 'move-left'} ${shakeButton ? 'shake' : ''}`}
+                >
+                    Search
+                </button>
             </form>
-            <div className="mt-6 grid grid-cols-1 gap-6">
-                {Object.keys(searchRequest).length !== 0 && searchResults.length === 0 && (
-                    <p className="text-center">No results found</p>
+            <div className="mt-6">
+                {loading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {Array.from({ length: 6 }).map((_, index) => (
+                            <div key={index} className="p-4">
+                                <Skeleton height={300} width={350} />
+                                <Skeleton height={20} width="80%" />
+                                <Skeleton height={20} width="60%" />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    searchResults.length === 0 ? (
+                        <p>No results found</p>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {searchResults.map(item => (
+                                <Link to={`/objects/${item.objectID}`} key={item.objectID}>
+                                    <Card
+                                        image={item.primaryImage}
+                                        title={item.title}
+                                        artist={item.artistDisplayName}
+                                    />
+                                </Link>
+                            ))}
+                        </div>
+                    )
                 )}
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {searchResults.map(item => (
-                        <Card
-                            image={item.primaryImage}
-                            title={item.title}
-                            artist={item.artistDisplayName}
-                        />
-                    ))}
-                </div>
             </div>
         </div>
     );
