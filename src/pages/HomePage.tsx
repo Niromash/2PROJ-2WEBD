@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
         const fetchHighlights = async () => {
             try {
                 const querySearch = query?.get("q");
-                const highlightsData = await getHighlights(querySearch ?? undefined);
+                const highlightsData = await getHighlights(querySearch || undefined);
 
                 if (highlightsData.length === 0) {
                     setError('No highlights found');

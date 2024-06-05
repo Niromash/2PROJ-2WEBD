@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import QuickSearchBar from "./QuickSearchBar.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHome, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
@@ -43,15 +42,13 @@ const Sidebar: React.FC = () => {
                     </div>
 
                     {navbarItems.map(item => (
-                        <Link to={item.path} className="flex items-center justify-between w-full">
+                        <Link to={item.path} className="flex items-center justify-between w-full" key={item.path}>
                             <div className="text-white flex items-center">
                                 <FontAwesomeIcon icon={item.icon}/>
                                 <span className={`${isCollapsed ? 'hidden' : 'block'} ml-4`}>{item.name}</span>
                             </div>
                         </Link>
                     ))}
-
-                    {isCollapsed ? null : <QuickSearchBar/>}
                 </nav>
             </div>
         </div>
